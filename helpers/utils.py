@@ -1,6 +1,19 @@
 from logging import getLogger, INFO, FileHandler,  Formatter,  StreamHandler
 from helpers.config import Config
 import math
+import random
+import os
+import torch
+import numpy as np
+
+
+def seed_torch(seed=42):
+    random.seed(seed)
+    os.environ['PYTHONHASHSEED'] = str(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed(seed)
+    torch.backends.cudnn.deterministic = True
 
 
 # Torch convention
@@ -22,7 +35,14 @@ def init_logger(log_file=Config.OUTPUT_DIR+'train.log'):
     return logger
 
 
-def find_lr(model, train_loader, loss_fn, optimizer, init_value=1e-8, final_value=10.0):
+def find_lr(
+    model,
+    train_loader,
+    loss_fn,
+    optimizer,
+    init_value=1e-8,
+    final_value=10.0
+):
     number_in_epoch = len(train_loader) - 1
     update_step = (final_value / init_value) ** (1 / number_in_epoch)
     lr = init_value
