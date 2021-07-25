@@ -1,4 +1,5 @@
 class Config:
+    filename = "train_labels.csv"
     debug = True
     print_freq = 100
     num_workers = 4
